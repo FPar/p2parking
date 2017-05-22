@@ -1,0 +1,4 @@
+#!/bin/sh
+cd `dirname $0`
+../src/p2parking -n .:../src $*
+# for shared lib, use: opp_run -l ../src/p2parking -n .:../src $*

@@ -1,0 +1,8 @@
+src/Makefile
+src/*.so
+src/*.exe
+src/**/*_m.h
+src/**/*_m.cc
+
+/out
+
