@@ -13,14 +13,6 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include <application/P2P.h>
+#include "P2P.h"
 
-P2P::P2P() {
-    // TODO Auto-generated constructor stub
-
-}
-
-P2P::~P2P() {
-    // TODO Auto-generated destructor stub
-}
-
+Define_Module(P2P);

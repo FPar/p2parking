@@ -16,6 +16,8 @@
 #ifndef APPLICATION_P2P_H_
 #define APPLICATION_P2P_H_
 
+#include <BaseWaveApplLayer.h>
+
 class P2P: public BaseWaveApplLayer {
 public:
 };

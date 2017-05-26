@@ -13,14 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include <application/P2PRSU.h>
+#include "P2PRSU.h"
 
-P2PRSU::P2PRSU() {
-    // TODO Auto-generated constructor stub
+Define_Module(P2PRSU);
+
+void P2PRSU::onWSM(WaveShortMessage* wsm)
+{
 
 }
 
-P2PRSU::~P2PRSU() {
-    // TODO Auto-generated destructor stub
-}
+void P2PRSU::onWSA(WaveServiceAdvertisment* wsa)
+{
 
+}

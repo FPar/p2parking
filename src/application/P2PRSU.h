@@ -16,12 +16,12 @@
 #ifndef APPLICATION_P2PRSU_H_
 #define APPLICATION_P2PRSU_H_
 
-#include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
+#include <BaseWaveApplLayer.h>
 
 class P2PRSU: public BaseWaveApplLayer {
 protected:
-    virtual void onWSM(WaveShortMessage* wsm);
-    virtual void onWSA(WaveServiceAdvertisment* wsa);
+    void onWSM(WaveShortMessage* wsm);
+    void onWSA(WaveServiceAdvertisment* wsa);
 };
 
 #endif /* APPLICATION_P2PRSU_H_ */
