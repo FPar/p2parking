@@ -13,15 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef APPLICATION_P2P_H_
-#define APPLICATION_P2P_H_
+cplusplus {{
+#include "veins/modules/messages/WaveShortMessage_m.h"
+}}
+class WaveShortMessage;
 
-#include <BaseWaveApplLayer.h>
-
-class P2P: public BaseWaveApplLayer {
-protected:
-    void onWSM(WaveShortMessage* wsm);
-    void onWSA(WaveServiceAdvertisment* wsa);
-};
-
-#endif /* APPLICATION_P2P_H_ */
+//
+// TODO generated message class
+//
+packet ParkingReport extends WaveShortMessage {
+    int packetType;
+    int parkingReportCount;
+    int aggregateReportCount;
+}

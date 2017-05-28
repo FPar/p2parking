@@ -14,15 +14,32 @@
 // 
 
 #include "P2PRSU.h"
+#include "messages/ParkingReport_m.h"
 
 Define_Module(P2PRSU);
 
-void P2PRSU::onWSM(WaveShortMessage* wsm)
-{
-
+void P2PRSU::initialize(int stage) {
+    BaseWaveApplLayer::initialize(stage);
+    if (stage == 0) {
+        broadcastPPIEvt = new BroadcastParkingPlaceInformationEvt();
+        scheduleAt(simTime() + 10, broadcastPPIEvt);
+    }
 }
 
-void P2PRSU::onWSA(WaveServiceAdvertisment* wsa)
-{
+void P2PRSU::onWSM(WaveShortMessage* wsm) {
+}
 
+void P2PRSU::onWSA(WaveServiceAdvertisment* wsa) {
+}
+
+void P2PRSU::handleSelfMsg(cMessage* msg) {
+    if (dynamic_cast<BroadcastParkingPlaceInformationEvt*>(msg)) {
+        ParkingReport* report = new ParkingReport();
+        populateWSM(report);
+        sendDown(report);
+
+        scheduleAt(simTime() + 10, broadcastPPIEvt);
+    } else {
+        BaseWaveApplLayer::handleSelfMsg(msg);
+    }
 }

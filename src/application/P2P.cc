@@ -16,3 +16,10 @@
 #include "P2P.h"
 
 Define_Module(P2P);
+
+void P2P::onWSM(WaveShortMessage* wsm) {
+    EV << "wsm!";
+}
+
+void P2P::onWSA(WaveServiceAdvertisment* wsa) {
+}

@@ -17,11 +17,19 @@
 #define APPLICATION_P2PRSU_H_
 
 #include <BaseWaveApplLayer.h>
+#include "messages/BroadcastParkingPlaceInformationEvt_m.h"
 
 class P2PRSU: public BaseWaveApplLayer {
+public:
+    void initialize(int stage);
+
 protected:
     void onWSM(WaveShortMessage* wsm);
     void onWSA(WaveServiceAdvertisment* wsa);
+
+    void handleSelfMsg(cMessage* msg);
+
+    BroadcastParkingPlaceInformationEvt* broadcastPPIEvt;
 };
 
 #endif /* APPLICATION_P2PRSU_H_ */
