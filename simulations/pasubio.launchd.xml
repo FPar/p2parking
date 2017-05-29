@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+	<copy file="pasubio.rou.xml" />
+	<copy file="pasubio_bus_stops.add.xml" />
+	<copy file="pasubio_buslanes.net.xml" />
+	<copy file="pasubio_busses.rou.xml" />
+	<copy file="pasubio_detectors.add.xml" />
+	<copy file="pasubio_tls.add.xml" />
+	<copy file="pasubio_vtypes.add.xml" />
+	<copy file="pasubio.sumo.cfg" type="config" />
+</launch>
+

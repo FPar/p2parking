@@ -8,4 +8,5 @@ src/**/*_m.cc
 
 simulations/.cmdenv-log
 simulations/.tkenvrc
+simulations/.tkenvlog
 
