@@ -13,16 +13,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-cplusplus {{
-#include "veins/modules/messages/WaveShortMessage_m.h"
-}}
-class WaveShortMessage;
+#include <ParkingReport.h>
 
-//
-// TODO generated message class
-//
-packet ParkingReport extends WaveShortMessage {
-    int packetType;
-    int parkingReportCount;
-    int aggregateReportCount;
+ParkingReport::ParkingReport() {
+
 }
+
+ParkingReport::~ParkingReport() {
+}
+

@@ -13,23 +13,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef APPLICATION_P2P_H_
-#define APPLICATION_P2P_H_
+#include <AggregateReport.h>
 
-#include <BaseWaveApplLayer.h>
-#include "messages/BroadcastParkingPlaceInformationEvt_m.h"
+AggregateReport::AggregateReport() {
 
-class P2P: public BaseWaveApplLayer {
-public:
-    void initialize(int stage);
+}
 
-protected:
-    void onWSM(WaveShortMessage* wsm);
-    void onWSA(WaveServiceAdvertisment* wsa);
+AggregateReport::~AggregateReport() {
+}
 
-    void handleSelfMsg(cMessage* msg);
-
-    BroadcastParkingPlaceInformationEvt* broadcastPPIEvt;
-};
-
-#endif /* APPLICATION_P2P_H_ */

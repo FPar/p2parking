@@ -6,6 +6,7 @@ src/**/*_m.cc
 
 /out
 
+simulations/results/
 simulations/.cmdenv-log
 simulations/.tkenvrc
 simulations/.tkenvlog

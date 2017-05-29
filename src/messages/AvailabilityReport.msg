@@ -13,23 +13,23 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef APPLICATION_P2P_H_
-#define APPLICATION_P2P_H_
+cplusplus {{
+#include "veins/modules/messages/WaveShortMessage_m.h"
+#include "ParkingReport.h"
+#include "AggregateReport.h"
+}}
 
-#include <BaseWaveApplLayer.h>
-#include "messages/BroadcastParkingPlaceInformationEvt_m.h"
+class WaveShortMessage;
+class noncobject ParkingReport;
+class noncobject AggregateReport;
 
-class P2P: public BaseWaveApplLayer {
-public:
-    void initialize(int stage);
-
-protected:
-    void onWSM(WaveShortMessage* wsm);
-    void onWSA(WaveServiceAdvertisment* wsa);
-
-    void handleSelfMsg(cMessage* msg);
-
-    BroadcastParkingPlaceInformationEvt* broadcastPPIEvt;
-};
-
-#endif /* APPLICATION_P2P_H_ */
+//
+// TODO generated message class
+//
+packet AvailabilityReport extends WaveShortMessage {
+    int packetType;
+    unsigned short parkingReportCount;
+    char aggregateReportCount;
+    ParkingReport parkingReports[];
+    AggregateReport aggregateReports[];
+}

@@ -14,12 +14,33 @@
 // 
 
 #include "P2P.h"
+#include "messages/AvailabilityReport_m.h"
 
 Define_Module(P2P);
+
+void P2P::initialize(int stage) {
+    BaseWaveApplLayer::initialize(stage);
+    if (stage == 0) {
+        broadcastPPIEvt = new BroadcastParkingPlaceInformationEvt();
+        scheduleAt(simTime() + 10 + normal(1.0, 1.0), broadcastPPIEvt);
+    }
+}
 
 void P2P::onWSM(WaveShortMessage* wsm) {
     EV << "wsm!";
 }
 
 void P2P::onWSA(WaveServiceAdvertisment* wsa) {
+}
+
+void P2P::handleSelfMsg(cMessage* msg) {
+    if (dynamic_cast<BroadcastParkingPlaceInformationEvt*>(msg)) {
+        AvailabilityReport* report = new AvailabilityReport();
+        populateWSM(report);
+        sendDown(report);
+
+        scheduleAt(simTime() + 10, broadcastPPIEvt);
+    } else {
+        BaseWaveApplLayer::handleSelfMsg(msg);
+    }
 }

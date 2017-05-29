@@ -14,7 +14,7 @@
 // 
 
 #include "P2PRSU.h"
-#include "messages/ParkingReport_m.h"
+#include "messages/AvailabilityReport_m.h"
 
 Define_Module(P2PRSU);
 
@@ -34,7 +34,7 @@ void P2PRSU::onWSA(WaveServiceAdvertisment* wsa) {
 
 void P2PRSU::handleSelfMsg(cMessage* msg) {
     if (dynamic_cast<BroadcastParkingPlaceInformationEvt*>(msg)) {
-        ParkingReport* report = new ParkingReport();
+        AvailabilityReport* report = new AvailabilityReport();
         populateWSM(report);
         sendDown(report);
 
