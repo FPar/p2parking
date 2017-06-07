@@ -23,8 +23,14 @@
 
 class AggregateInformation {
 public:
+    /**
+     * Horizontal grid position.
+     */
     unsigned short i;
 
+    /**
+     * Vertical grid position.
+     */
     unsigned short j;
     /**
      * Time of origin.

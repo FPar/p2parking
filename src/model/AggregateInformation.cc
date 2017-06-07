@@ -13,6 +13,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
+#include <cmath>
 #include <AggregateInformation.h>
 
 #define AVG_SPEED (40.0 / 3.6)
@@ -29,5 +30,13 @@ double AggregateInformation::relevance(Coord& position) {
 }
 
 bool AggregateInformation::isWithin(Coord& position) {
-
+    double current_edge_length = pow(2, level) * AGGREGATE_EDGE_LENGTH;
+    double horizontal_min = current_edge_length * (i - 1);
+    double horizontal_max = horizontal_min + current_edge_length;
+    double vertical_min = current_edge_length * (j - 1);
+    double vertical_max = vertical_min + current_edge_length;
+    return position.x >= horizontal_min
+            && position.x < horizontal_max
+            && position.z >= vertical_min
+            && possition.z < vertical_max;
 }
