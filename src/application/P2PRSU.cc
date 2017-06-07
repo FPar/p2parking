@@ -13,8 +13,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
+#include <ctime>
 #include "P2PRSU.h"
-#include "messages/AvailabilityReport_m.h"
 
 Define_Module(P2PRSU);
 
@@ -34,12 +34,22 @@ void P2PRSU::onWSA(WaveServiceAdvertisment* wsa) {
 
 void P2PRSU::handleSelfMsg(cMessage* msg) {
     if (dynamic_cast<BroadcastParkingPlaceInformationEvt*>(msg)) {
-        AvailabilityReport* report = new AvailabilityReport();
-        populateWSM(report);
+        ResourceReport* report = generateReport();
         sendDown(report);
-
         scheduleAt(simTime() + 10, broadcastPPIEvt);
     } else {
         BaseWaveApplLayer::handleSelfMsg(msg);
     }
+}
+
+ResourceReport* P2PRSU::generateReport() {
+    ResourceReport* report = new ResourceReport();
+    populateWSM(report);
+
+    report->setAtomicsArraySize(1);
+
+    AtomicInformation information(myId, time(NULL), curPosition, 100, 20);
+    report->setAtomics(0, information);
+
+    return report;
 }

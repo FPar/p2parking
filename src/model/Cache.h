@@ -13,27 +13,14 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef APPLICATION_P2PRSU_H_
-#define APPLICATION_P2PRSU_H_
+#ifndef MODEL_CACHE_H_
+#define MODEL_CACHE_H_
 
-#include <BaseWaveApplLayer.h>
-#include "messages/BroadcastParkingPlaceInformationEvt_m.h"
 #include "messages/ResourceReport_m.h"
 
-class P2PRSU: public BaseWaveApplLayer {
+class Cache {
 public:
-    void initialize(int stage);
-
-protected:
-    void onWSM(WaveShortMessage* wsm);
-    void onWSA(WaveServiceAdvertisment* wsa);
-
-    void handleSelfMsg(cMessage* msg);
-
-    BroadcastParkingPlaceInformationEvt* broadcastPPIEvt;
-
-private:
-    ResourceReport* generateReport();
+    void update(ResourceReport& report);
 };
 
-#endif /* APPLICATION_P2PRSU_H_ */
+#endif /* MODEL_CACHE_H_ */

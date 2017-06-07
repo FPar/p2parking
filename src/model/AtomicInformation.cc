@@ -13,12 +13,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include <AggregateReport.h>
+#include <model/AtomicInformation.h>
 
-AggregateReport::AggregateReport() {
+#define AVG_SPEED (40.0 / 3.6)
 
+double AtomicInformation::relevance(Coord &position) {
+    double distance = position.distance(poo);
+    double age_s = difftime(time(NULL), too);
+    return -distance / AVG_SPEED - age_s;
 }
-
-AggregateReport::~AggregateReport() {
-}
-

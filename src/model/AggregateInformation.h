@@ -13,13 +13,44 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef MESSAGES_PARKINGREPORT_H_
-#define MESSAGES_PARKINGREPORT_H_
+#ifndef MODEL_AGGREGATEINFORMATION_H_
+#define MODEL_AGGREGATEINFORMATION_H_
 
-class ParkingReport {
+#include <ctime>
+#include "veins/base/utils/Coord.h"
+
+#define AGGREGATE_EDGE_LENGTH 10
+
+class AggregateInformation {
 public:
-    ParkingReport();
-    virtual ~ParkingReport();
+    unsigned short i;
+
+    unsigned short j;
+    /**
+     * Time of origin.
+     */
+    std::time_t too;
+
+    /**
+     * Point of origin.
+     */
+    Coord poo;
+
+    unsigned short capacity;
+
+    unsigned short occupancy;
+
+    unsigned short level;
+
+    unsigned short n;
+
+    AggregateInformation() {
+    }
+
+    double relevance(Coord& position);
+
+private:
+    bool isWithin(Coord& position);
 };
 
-#endif /* MESSAGES_PARKINGREPORT_H_ */
+#endif /* MODEL_AGGREGATEINFORMATION_H_ */

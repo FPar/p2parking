@@ -13,23 +13,21 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-cplusplus {{
-#include "veins/modules/messages/WaveShortMessage_m.h"
-#include "ParkingReport.h"
-#include "AggregateReport.h"
-}}
+#include <AggregateInformation.h>
 
-class WaveShortMessage;
-class noncobject ParkingReport;
-class noncobject AggregateReport;
+#define AVG_SPEED (40.0 / 3.6)
 
-//
-// TODO generated message class
-//
-packet AvailabilityReport extends WaveShortMessage {
-    int packetType;
-    unsigned short parkingReportCount;
-    char aggregateReportCount;
-    ParkingReport parkingReports[];
-    AggregateReport aggregateReports[];
+double AggregateInformation::relevance(Coord& position) {
+    double age_s = difftime(time(NULL), too);
+
+    if (isWithin(position)) {
+        return -age_s;
+    } else {
+        double distance = position.distance(poo);
+        return 1.0 / double(n) * (-distance / AVG_SPEED - age_s);
+    }
+}
+
+bool AggregateInformation::isWithin(Coord& position) {
+
 }

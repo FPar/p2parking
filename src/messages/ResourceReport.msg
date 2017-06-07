@@ -13,13 +13,17 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef MESSAGES_AGGREGATEREPORT_H_
-#define MESSAGES_AGGREGATEREPORT_H_
+cplusplus {{
+#include "veins/modules/messages/WaveShortMessage_m.h"
+#include "model/AtomicInformation.h"
+#include "model/AggregateInformation.h"
+}}
 
-class AggregateReport {
-public:
-    AggregateReport();
-    virtual ~AggregateReport();
-};
+class WaveShortMessage;
+class noncobject AtomicInformation;
+class noncobject AggregateInformation;
 
-#endif /* MESSAGES_AGGREGATEREPORT_H_ */
+packet ResourceReport extends WaveShortMessage {
+    AtomicInformation atomics[];
+    AggregateInformation aggregates[];
+}

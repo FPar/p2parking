@@ -18,6 +18,7 @@
 
 #include <BaseWaveApplLayer.h>
 #include "messages/BroadcastParkingPlaceInformationEvt_m.h"
+#include "model/Cache.h"
 
 class P2P: public BaseWaveApplLayer {
 public:
@@ -25,11 +26,13 @@ public:
 
 protected:
     void onWSM(WaveShortMessage* wsm);
-    void onWSA(WaveServiceAdvertisment* wsa);
 
     void handleSelfMsg(cMessage* msg);
 
     BroadcastParkingPlaceInformationEvt* broadcastPPIEvt;
+
+private:
+    Cache _cache;
 };
 
 #endif /* APPLICATION_P2P_H_ */

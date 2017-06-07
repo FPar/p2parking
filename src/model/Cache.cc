@@ -13,12 +13,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include <ParkingReport.h>
+#include <Cache.h>
 
-ParkingReport::ParkingReport() {
+void Cache::update(ResourceReport& report) {
 
 }
-
-ParkingReport::~ParkingReport() {
-}
-
