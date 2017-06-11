@@ -22,7 +22,7 @@ network P2ParkingScenario extends Scenario
 {
     @display("bgi=maps/pasubio;bgb=1830,1340");
     submodules:
-        rsu[1]: RSU {
+        rsu[10]: RSU {
             @display("p=150,140;b=10,10,oval");
         }
 }

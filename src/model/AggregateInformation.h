@@ -19,7 +19,7 @@
 #include <ctime>
 #include "veins/base/utils/Coord.h"
 
-#define AGGREGATE_EDGE_LENGTH 10
+#define AGGREGATE_EDGE_LENGTH 75
 
 class AggregateInformation {
 public:

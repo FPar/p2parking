@@ -38,5 +38,5 @@ bool AggregateInformation::isWithin(Coord& position) {
     return position.x >= horizontal_min
             && position.x < horizontal_max
             && position.z >= vertical_min
-            && possition.z < vertical_max;
+            && position.z < vertical_max;
 }
