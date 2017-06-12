@@ -35,6 +35,10 @@ void P2P::onWSM(WaveShortMessage* wsm) {
 
 void P2P::handleSelfMsg(cMessage* msg) {
     if (dynamic_cast<BroadcastParkingPlaceInformationEvt*>(msg)) {
+        ResourceReport* report = _cache.getReport();
+        populateWSM(report);
+
+        sendDown(report);
 
         scheduleAt(simTime() + 10, broadcastPPIEvt);
     } else {

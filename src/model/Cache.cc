@@ -18,3 +18,7 @@
 void Cache::update(ResourceReport& report) {
 
 }
+
+ResourceReport* Cache::getReport() {
+    return new ResourceReport();
+}

@@ -21,6 +21,7 @@
 class Cache {
 public:
     void update(ResourceReport& report);
+    ResourceReport* getReport();
 };
 
 #endif /* MODEL_CACHE_H_ */
