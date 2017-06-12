@@ -29,6 +29,13 @@ double AggregateInformation::relevance(Coord& position) {
     }
 }
 
+void AggregateInformation::add(ResourceInformation& info) {
+    too = (n * info.too + info.too) / (n + 1);
+    ++n;
+    capacity += info.capacity;
+    occupancy += occupancy;
+}
+
 bool AggregateInformation::isWithin(Coord& position) {
     double current_edge_length = pow(2, level) * AGGREGATE_EDGE_LENGTH;
     double horizontal_min = current_edge_length * (i - 1);

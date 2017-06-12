@@ -18,10 +18,11 @@
 
 #include <ctime>
 #include "veins/base/utils/Coord.h"
+#include "ResourceInformation.h"
 
 #define AGGREGATE_EDGE_LENGTH 75
 
-class AggregateInformation {
+class AggregateInformation: public ResourceInformation {
 public:
     /**
      * Horizontal grid position.
@@ -32,19 +33,6 @@ public:
      * Vertical grid position.
      */
     unsigned short j;
-    /**
-     * Time of origin.
-     */
-    std::time_t too;
-
-    /**
-     * Point of origin.
-     */
-    Coord poo;
-
-    unsigned short capacity;
-
-    unsigned short occupancy;
 
     unsigned short level;
 
@@ -54,6 +42,8 @@ public:
     }
 
     double relevance(Coord& position);
+
+    void add(ResourceInformation& info);
 
 private:
     bool isWithin(Coord& position);

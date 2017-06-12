@@ -13,26 +13,34 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef MODEL_ATOMICINFORMATION_H_
-#define MODEL_ATOMICINFORMATION_H_
+#ifndef MODEL_RESOURCEINFORMATION_H_
+#define MODEL_RESOURCEINFORMATION_H_
 
-#include <ctime>
-#include "veins/base/utils/Coord.h"
-#include "ResourceInformation.h"
-
-class AtomicInformation: public ResourceInformation {
+class ResourceInformation {
 public:
-    unsigned int id;
+    /**
+     * Time of origin.
+     */
+    std::time_t too;
 
-    AtomicInformation() {
+    /**
+     * Point of origin.
+     */
+    Coord poo;
+
+    unsigned short capacity;
+
+    unsigned short occupancy;
+
+    ResourceInformation() {
     }
 
-    AtomicInformation(unsigned int id, std::time_t too, Coord& poo,
-            unsigned short capacity, unsigned short occupancy) :
-            ResourceInformation(too, poo, capacity, occupancy), id(id) {
+    ResourceInformation(std::time_t too, Coord& poo, unsigned short capacity,
+            unsigned short occupancy) :
+            too(too), poo(poo), capacity(capacity), occupancy(occupancy) {
     }
 
-    double relevance(Coord& position);
+    virtual double relevance(Coord& position) = 0;
 };
 
-#endif /* MODEL_ATOMICINFORMATION_H_ */
+#endif /* MODEL_RESOURCEINFORMATION_H_ */
