@@ -17,6 +17,7 @@
 #define MODEL_AGGREGATEINFORMATION_H_
 
 #include <ctime>
+#include <string>
 #include "veins/base/utils/Coord.h"
 #include "ResourceInformation.h"
 
@@ -45,6 +46,7 @@ public:
 
     void add(ResourceInformation& info);
 
+    std::string posStr();
 private:
     bool isWithin(Coord& position);
 };

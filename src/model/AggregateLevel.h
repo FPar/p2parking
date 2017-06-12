@@ -13,27 +13,19 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef MODEL_CACHE_H_
-#define MODEL_CACHE_H_
+#ifndef MODEL_AGGREGATELEVEL_H_
+#define MODEL_AGGREGATELEVEL_H_
 
-#define CACHE_LEVELS 6
-#define ENTRY_TTL 500
-
-#include <array>
 #include <map>
-#include "messages/ResourceReport_m.h"
-#include "AggregateLevel.h"
+#include <string>
+#include "AggregateInformation.h"
 
-class Cache {
+class AggregateLevel {
 public:
-    void update(ResourceReport& report);
-    ResourceReport* getReport();
+    void update(AggregateInformation& aggregate);
 
 private:
-    std::array<AggregateLevel, CACHE_LEVELS> _levels;
-    std::map<int, AtomicInformation> _atomics;
-
-    void cleanup();
+    std::map<std::string, AggregateInformation> _aggregates;
 };
 
-#endif /* MODEL_CACHE_H_ */
+#endif /* MODEL_AGGREGATELEVEL_H_ */

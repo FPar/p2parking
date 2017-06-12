@@ -47,3 +47,7 @@ bool AggregateInformation::isWithin(Coord& position) {
             && position.z >= vertical_min
             && position.z < vertical_max;
 }
+
+std::string AggregateInformation::posStr() {
+    return std::to_string(i) + ";" + std::to_string(j);
+}

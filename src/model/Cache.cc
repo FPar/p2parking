@@ -15,10 +15,30 @@
 
 #include <Cache.h>
 
-void Cache::update(ResourceReport& report) {
+using namespace std;
 
+void Cache::update(ResourceReport& report) {
+    for (int i = 0; i < report.getAtomicsArraySize(); ++i) {
+        AtomicInformation& info = report.getAtomics(i);
+        auto it = _atomics.find(info.id);
+        if (it != _atomics.end()) {
+            _atomics.erase(info.id);
+        }
+        _atomics.insert(pair<int, AtomicInformation>(info.id, info));
+    }
+
+    for (int i = 0; i < report.getAggregatesArraySize(); ++i) {
+        AggregateInformation& info = report.getAggregates(i);
+        AggregateLevel& aggregateLevel = _levels[info.level];
+        aggregateLevel.update(info);
+    }
 }
 
 ResourceReport* Cache::getReport() {
+
     return new ResourceReport();
+}
+
+void Cache::cleanup() {
+
 }
