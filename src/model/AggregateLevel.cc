@@ -15,6 +15,8 @@
 
 #include <AggregateLevel.h>
 
+#define ENTRY_TTL 500
+
 using namespace std;
 
 void AggregateLevel::update(AggregateInformation& aggregate) {
@@ -24,4 +26,13 @@ void AggregateLevel::update(AggregateInformation& aggregate) {
         _aggregates.erase(key);
     }
     _aggregates.insert(pair<string, AggregateInformation>(key, aggregate));
+}
+
+void AggregateLevel::cleanup() {
+    time_t now = time(NULL);
+    for(auto it = _aggregates.begin(); it != _aggregates.end(); ++it) {
+        if(difftime(now, it->second.too) > ENTRY_TTL) {
+            _aggregates.erase(it);
+        }
+    }
 }

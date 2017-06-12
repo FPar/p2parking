@@ -14,6 +14,9 @@
 // 
 
 #include <Cache.h>
+#include <ctime>
+
+#define ENTRY_TTL 500
 
 using namespace std;
 
@@ -35,10 +38,19 @@ void Cache::update(ResourceReport& report) {
 }
 
 ResourceReport* Cache::getReport() {
-
+    cleanup();
     return new ResourceReport();
 }
 
 void Cache::cleanup() {
+    time_t now = time(NULL);
+    for (auto it = _atomics.begin(); it != _atomics.end(); ++it) {
+        if (difftime(now, it->second.too) > ENTRY_TTL) {
+            _atomics.erase(it);
+        }
+    }
 
+    for (auto it = _levels.begin(); it != _levels.end(); ++it) {
+        it->cleanup();
+    }
 }

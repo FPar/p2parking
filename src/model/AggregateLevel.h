@@ -23,6 +23,7 @@
 class AggregateLevel {
 public:
     void update(AggregateInformation& aggregate);
+    void cleanup();
 
 private:
     std::map<std::string, AggregateInformation> _aggregates;

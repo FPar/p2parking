@@ -17,7 +17,6 @@
 #define MODEL_CACHE_H_
 
 #define CACHE_LEVELS 6
-#define ENTRY_TTL 500
 
 #include <array>
 #include <map>
