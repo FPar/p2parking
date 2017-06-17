@@ -10,4 +10,5 @@ simulations/results/
 simulations/.cmdenv-log
 simulations/.tkenvrc
 simulations/.tkenvlog
+simulations/*.anf
 

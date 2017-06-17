@@ -21,7 +21,7 @@ void P2P::initialize(int stage) {
     BaseWaveApplLayer::initialize(stage);
     if (stage == 0) {
         broadcastPPIEvt = new BroadcastParkingPlaceInformationEvt();
-        scheduleAt(simTime() + 10 + normal(1.0, 1.0), broadcastPPIEvt);
+        scheduleAt(simTime() + 10 + normal(0, 1.0), broadcastPPIEvt);
     }
 }
 

@@ -21,19 +21,20 @@
 #include "messages/ResourceReport_m.h"
 
 class P2PRSU: public BaseWaveApplLayer {
-public:
-    void initialize(int stage);
+private:
+    int capacity;
+    int occupancy = 0;
+
+    cOutVector occupancyVector;
+
+    ResourceReport* generateReport();
 
 protected:
-    void onWSM(WaveShortMessage* wsm);
-    void onWSA(WaveServiceAdvertisment* wsa);
-
-    void handleSelfMsg(cMessage* msg);
-
     BroadcastParkingPlaceInformationEvt* broadcastPPIEvt;
 
-private:
-    ResourceReport* generateReport();
+    void initialize(int stage) override;
+
+    void handleSelfMsg(cMessage* msg) override;
 };
 
 #endif /* APPLICATION_P2PRSU_H_ */
