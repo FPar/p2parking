@@ -14,6 +14,7 @@
 // 
 
 #include "P2P.h"
+#include "P2PRSU.h"
 
 Define_Module(P2P);
 
@@ -35,7 +36,7 @@ void P2P::onWSM(WaveShortMessage* wsm) {
 
 void P2P::handleSelfMsg(cMessage* msg) {
     if (dynamic_cast<BroadcastParkingPlaceInformationEvt*>(msg)) {
-        ResourceReport* report = _cache.getReport();
+        ResourceReport* report = _cache.getReport(curPosition);
         populateWSM(report);
 
         sendDown(report);

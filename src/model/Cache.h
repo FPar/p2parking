@@ -26,7 +26,7 @@
 class Cache {
 public:
     void update(ResourceReport& report);
-    ResourceReport* getReport();
+    ResourceReport* getReport(Coord& position);
 
 private:
     std::array<AggregateLevel, CACHE_LEVELS> _levels;

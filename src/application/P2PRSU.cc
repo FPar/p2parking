@@ -16,18 +16,21 @@
 #include <ctime>
 #include "P2PRSU.h"
 
+int Occupancies[10];
+
 Define_Module(P2PRSU);
 
 void P2PRSU::initialize(int stage) {
     BaseWaveApplLayer::initialize(stage);
     if (stage == 0) {
+
         capacity = rand() % 15 + 10;
-        occupancy = rand() % (capacity + 1);
+        Occupancies[getIndex()] = rand() % (capacity + 1);
 
         recordScalar("#capacity", capacity);
 
         occupancyVector.setName("occupancy");
-        occupancyVector.record(occupancy);
+        occupancyVector.record(Occupancies[getIndex()]);
 
         broadcastPPIEvt = new BroadcastParkingPlaceInformationEvt();
         scheduleAt(simTime() + 10 + normal(0, 5.0), broadcastPPIEvt);
@@ -36,12 +39,12 @@ void P2PRSU::initialize(int stage) {
 
 void P2PRSU::handleSelfMsg(cMessage* msg) {
     if (dynamic_cast<BroadcastParkingPlaceInformationEvt*>(msg)) {
-        occupancy += normal(0, capacity * 0.1);
-        if(occupancy > capacity)
-            occupancy = capacity;
-        else if(occupancy < 0)
-            occupancy = 0;
-        occupancyVector.record(occupancy);
+        Occupancies[getIndex()] += normal(0, capacity * 0.1);
+        if(Occupancies[getIndex()] > capacity)
+            Occupancies[getIndex()] = capacity;
+        else if(Occupancies[getIndex()] < 0)
+            Occupancies[getIndex()] = 0;
+        occupancyVector.record(Occupancies[getIndex()]);
 
         ResourceReport* report = generateReport();
         sendDown(report);
@@ -58,7 +61,7 @@ ResourceReport* P2PRSU::generateReport() {
     report->setAtomicsArraySize(1);
 
     AtomicInformation information(myId, time(NULL), curPosition, capacity,
-            occupancy);
+            Occupancies[getIndex()]);
     report->setAtomics(0, information);
 
     return report;

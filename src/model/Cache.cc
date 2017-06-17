@@ -15,8 +15,11 @@
 
 #include <Cache.h>
 #include <ctime>
+#include <vector>
+#include <algorithm>
 
 #define ENTRY_TTL 500
+#define MAXIMUM_REPORT_COUNT 139
 
 using namespace std;
 
@@ -37,9 +40,63 @@ void Cache::update(ResourceReport& report) {
     }
 }
 
-ResourceReport* Cache::getReport() {
+bool compareReports(ResourceInformation* a, ResourceInformation* b) {
+    return a->_relevance > b->_relevance;
+}
+
+ResourceReport* Cache::getReport(Coord& position) {
     cleanup();
-    return new ResourceReport();
+
+    vector<AtomicInformation*> at;
+    vector<AggregateInformation*> agg;
+
+    for (auto it = _atomics.begin(); it != _atomics.end(); ++it) {
+        at.push_back(&it->second);
+        it->second.saveRelevance(position);
+    }
+
+    for (auto it = _levels.begin(); it != _levels.end(); ++it) {
+        for (auto it2 = it->_aggregates.begin(); it2 != it->_aggregates.end();
+                ++it2) {
+            agg.push_back(&it2->second);
+            it2->second.saveRelevance(position);
+        }
+    }
+
+    sort(at.begin(), at.end(), compareReports);
+    sort(agg.begin(), agg.end(), compareReports);
+
+    ResourceReport* r = new ResourceReport();
+
+    int ati = 0, aggi = 0;
+
+    r->setAtomicsArraySize(MAXIMUM_REPORT_COUNT);
+    r->setAggregatesArraySize(MAXIMUM_REPORT_COUNT);
+
+    for (int i = 0; i < MAXIMUM_REPORT_COUNT; ++i) {
+        if (ati == at.size() && aggi == agg.size()) {
+            break;
+        }
+
+        if (ati == at.size()) {
+            r->setAggregates(aggi, *agg.at(aggi));
+            ++aggi;
+        } else if (aggi == agg.size()) {
+            r->setAtomics(ati, *at.at(ati));
+            ++ati;
+        } else if (at.at(ati)->_relevance > agg.at(aggi)->_relevance) {
+            r->setAtomics(ati, *at.at(ati));
+            ++ati;
+        } else {
+            r->setAggregates(aggi, *agg.at(aggi));
+            ++aggi;
+        }
+    }
+
+    r->setAtomicsArraySize(ati);
+    r->setAggregatesArraySize(aggi);
+
+    return r;
 }
 
 void Cache::cleanup() {

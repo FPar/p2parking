@@ -16,6 +16,9 @@
 #ifndef MODEL_RESOURCEINFORMATION_H_
 #define MODEL_RESOURCEINFORMATION_H_
 
+#include <ctime>
+#include "Coord.h"
+
 class ResourceInformation {
 public:
     /**
@@ -32,6 +35,8 @@ public:
 
     unsigned short occupancy;
 
+    double _relevance;
+
     ResourceInformation() {
     }
 
@@ -39,6 +44,8 @@ public:
             unsigned short occupancy) :
             too(too), poo(poo), capacity(capacity), occupancy(occupancy) {
     }
+
+    void saveRelevance(Coord& position);
 
     virtual double relevance(Coord& position) = 0;
 };

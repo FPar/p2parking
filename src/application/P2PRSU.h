@@ -20,10 +20,11 @@
 #include "messages/BroadcastParkingPlaceInformationEvt_m.h"
 #include "messages/ResourceReport_m.h"
 
+extern int Occupancies[10];
+
 class P2PRSU: public BaseWaveApplLayer {
 private:
     int capacity;
-    int occupancy = 0;
 
     cOutVector occupancyVector;
 
