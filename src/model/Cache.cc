@@ -46,6 +46,7 @@ bool compareReports(ResourceInformation* a, ResourceInformation* b) {
 
 ResourceReport* Cache::getReport(Coord& position) {
     cleanup();
+    updateAggregates();
 
     vector<AtomicInformation*> at;
     vector<AggregateInformation*> agg;
@@ -109,5 +110,47 @@ void Cache::cleanup() {
 
     for (auto it = _levels.begin(); it != _levels.end(); ++it) {
         it->cleanup();
+    }
+}
+
+void Cache::updateAggregates() {
+    AggregateLevel& curLevel = _levels[0];
+
+    for (auto it = _atomics.begin(); it != _atomics.end(); ++it) {
+        string key = AggregateInformation::posStr(it->second);
+
+        auto aggit = curLevel._aggregates.find(key);
+        if (aggit != curLevel._aggregates.end() && !aggit->second.isNew) {
+            curLevel._aggregates.erase(aggit);
+            AggregateInformation a(it->second.poo, 1);
+            curLevel._aggregates[key] = a;
+        } else if (aggit == curLevel._aggregates.end()) {
+            AggregateInformation a(it->second.poo, 1);
+            curLevel._aggregates[key] = a;
+        }
+
+        curLevel._aggregates[key].add(it->second);
+    }
+
+    for (int i = 1; i < _levels.size(); ++i) {
+        curLevel = _levels[i];
+        AggregateLevel& prevLevel = _levels[i - 1];
+
+        for (auto it = prevLevel._aggregates.begin(); it != prevLevel._aggregates.end(); ++it) {
+            string key = it->second.posStr();
+
+            auto curit = curLevel._aggregates.find(key);
+            if (curit != curLevel._aggregates.end() && !curit->second.isNew) {
+                curLevel._aggregates.erase(curit);
+                AggregateInformation a(it->second.poo, i);
+                curLevel._aggregates[key] = a;
+            } else if (curit == curLevel._aggregates.end()) {
+                AggregateInformation a(it->second.poo, i);
+                curLevel._aggregates[key] = a;
+            }
+
+            curLevel._aggregates[key].add(it->second);
+            it->second.isNew = false;
+        }
     }
 }

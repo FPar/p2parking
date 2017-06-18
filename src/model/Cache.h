@@ -33,6 +33,7 @@ private:
     std::map<int, AtomicInformation> _atomics;
 
     void cleanup();
+    void updateAggregates();
 };
 
 #endif /* MODEL_CACHE_H_ */

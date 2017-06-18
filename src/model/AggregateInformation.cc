@@ -18,6 +18,20 @@
 
 #define AVG_SPEED (40.0 / 3.6)
 
+std::string AggregateInformation::posStr(AtomicInformation& info) {
+    int i = info.poo.x / AGGREGATE_EDGE_LENGTH + 1;
+    int j = info.poo.z / AGGREGATE_EDGE_LENGTH + 1;
+    return std::to_string(i) + ";" + std::to_string(j);
+}
+
+AggregateInformation::AggregateInformation(Coord& coord, unsigned short level) :
+        ResourceInformation(0, 0), level(level), n(0) {
+    i = (coord.x / AGGREGATE_EDGE_LENGTH + 1);
+    j = (coord.z / AGGREGATE_EDGE_LENGTH + 1);
+    poo.x = (i - 1) * (coord.x / AGGREGATE_EDGE_LENGTH + 1);
+    poo.z = (j - 1) * (coord.z / AGGREGATE_EDGE_LENGTH + 1);
+}
+
 double AggregateInformation::relevance(Coord& position) {
     double age_s = difftime(time(NULL), too);
 
@@ -42,10 +56,8 @@ bool AggregateInformation::isWithin(Coord& position) {
     double horizontal_max = horizontal_min + current_edge_length;
     double vertical_min = current_edge_length * (j - 1);
     double vertical_max = vertical_min + current_edge_length;
-    return position.x >= horizontal_min
-            && position.x < horizontal_max
-            && position.z >= vertical_min
-            && position.z < vertical_max;
+    return position.x >= horizontal_min && position.x < horizontal_max
+            && position.z >= vertical_min && position.z < vertical_max;
 }
 
 std::string AggregateInformation::posStr() {

@@ -40,6 +40,10 @@ public:
     ResourceInformation() {
     }
 
+    ResourceInformation(unsigned short capacity, unsigned short occupancy) :
+            capacity(capacity), occupancy(occupancy) {
+    }
+
     ResourceInformation(std::time_t too, Coord& poo, unsigned short capacity,
             unsigned short occupancy) :
             too(too), poo(poo), capacity(capacity), occupancy(occupancy) {

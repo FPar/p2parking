@@ -20,11 +20,14 @@
 #include <string>
 #include "veins/base/utils/Coord.h"
 #include "ResourceInformation.h"
+#include "AtomicInformation.h"
 
 #define AGGREGATE_EDGE_LENGTH 75
 
 class AggregateInformation: public ResourceInformation {
 public:
+    static std::string posStr(AtomicInformation& info);
+
     /**
      * Horizontal grid position.
      */
@@ -39,8 +42,12 @@ public:
 
     unsigned short n;
 
+    bool isNew = true;
+
     AggregateInformation() {
     }
+
+    AggregateInformation(Coord& coord, unsigned short level);
 
     double relevance(Coord& position);
 
