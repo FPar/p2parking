@@ -18,9 +18,9 @@
 
 #define AVG_SPEED (40.0 / 3.6)
 
-std::string AggregateInformation::posStr(AtomicInformation& info) {
-    int i = info.poo.x / AGGREGATE_EDGE_LENGTH + 1;
-    int j = info.poo.z / AGGREGATE_EDGE_LENGTH + 1;
+std::string AggregateInformation::posStr(Coord& coord) {
+    int i = coord.x / AGGREGATE_EDGE_LENGTH + 1;
+    int j = coord.z / AGGREGATE_EDGE_LENGTH + 1;
     return std::to_string(i) + ";" + std::to_string(j);
 }
 
@@ -32,14 +32,14 @@ AggregateInformation::AggregateInformation(Coord& coord, unsigned short level) :
     poo.z = (j - 1) * (coord.z / AGGREGATE_EDGE_LENGTH + 1);
 }
 
-double AggregateInformation::relevance(Coord& position) {
-    double age_s = difftime(time(NULL), too);
+double AggregateInformation::relevance(Coord& position, simtime_t& time) {
+    simtime_t age_s = time - too;
 
     if (isWithin(position)) {
-        return -age_s;
+        return -age_s.dbl();
     } else {
         double distance = position.distance(poo);
-        return 1.0 / double(n) * (-distance / AVG_SPEED - age_s);
+        return 1.0 / double(n) * (-distance / AVG_SPEED - age_s.dbl());
     }
 }
 

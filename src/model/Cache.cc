@@ -18,8 +18,8 @@
 #include <vector>
 #include <algorithm>
 
-#define ENTRY_TTL 500
-#define MAXIMUM_REPORT_COUNT 139
+#define ENTRY_TTL 50
+#define MAXIMUM_REPORT_COUNT 5
 
 using namespace std;
 
@@ -44,8 +44,8 @@ bool compareReports(ResourceInformation* a, ResourceInformation* b) {
     return a->_relevance > b->_relevance;
 }
 
-ResourceReport* Cache::getReport(Coord& position) {
-    cleanup();
+ResourceReport* Cache::getReport(Coord& position, simtime_t& time) {
+    cleanup(time);
     updateAggregates();
 
     vector<AtomicInformation*> at;
@@ -53,14 +53,14 @@ ResourceReport* Cache::getReport(Coord& position) {
 
     for (auto it = _atomics.begin(); it != _atomics.end(); ++it) {
         at.push_back(&it->second);
-        it->second.saveRelevance(position);
+        it->second.saveRelevance(position, time);
     }
 
     for (auto it = _levels.begin(); it != _levels.end(); ++it) {
         for (auto it2 = it->_aggregates.begin(); it2 != it->_aggregates.end();
                 ++it2) {
             agg.push_back(&it2->second);
-            it2->second.saveRelevance(position);
+            it2->second.saveRelevance(position, time);
         }
     }
 
@@ -100,57 +100,77 @@ ResourceReport* Cache::getReport(Coord& position) {
     return r;
 }
 
-void Cache::cleanup() {
-    time_t now = time(NULL);
-    for (auto it = _atomics.begin(); it != _atomics.end(); ++it) {
-        if (difftime(now, it->second.too) > ENTRY_TTL) {
-            _atomics.erase(it);
+void Cache::cleanup(simtime_t& time) {
+    for (auto it = _atomics.begin(); it != _atomics.end();) {
+        if ((time - it->second.too).dbl() > ENTRY_TTL) {
+            _atomics.erase(it++);
+        } else {
+            ++it;
         }
     }
 
     for (auto it = _levels.begin(); it != _levels.end(); ++it) {
-        it->cleanup();
+        it->cleanup(time);
     }
 }
 
 void Cache::updateAggregates() {
-    AggregateLevel& curLevel = _levels[0];
+    AggregateLevel* curLevel = &_levels[0];
 
     for (auto it = _atomics.begin(); it != _atomics.end(); ++it) {
-        string key = AggregateInformation::posStr(it->second);
+        string key = AggregateInformation::posStr(it->second.poo);
 
-        auto aggit = curLevel._aggregates.find(key);
-        if (aggit != curLevel._aggregates.end() && !aggit->second.isNew) {
-            curLevel._aggregates.erase(aggit);
+        auto aggit = curLevel->_aggregates.find(key);
+        if (aggit != curLevel->_aggregates.end() && !aggit->second.isNew) {
+            curLevel->_aggregates.erase(aggit);
             AggregateInformation a(it->second.poo, 1);
-            curLevel._aggregates[key] = a;
-        } else if (aggit == curLevel._aggregates.end()) {
+            curLevel->_aggregates[key] = a;
+        } else if (aggit == curLevel->_aggregates.end()) {
             AggregateInformation a(it->second.poo, 1);
-            curLevel._aggregates[key] = a;
+            curLevel->_aggregates[key] = a;
         }
 
-        curLevel._aggregates[key].add(it->second);
+        curLevel->_aggregates[key].add(it->second);
     }
 
     for (int i = 1; i < _levels.size(); ++i) {
-        curLevel = _levels[i];
-        AggregateLevel& prevLevel = _levels[i - 1];
+        curLevel = &_levels[i];
+        AggregateLevel* prevLevel = &_levels[i - 1];
 
-        for (auto it = prevLevel._aggregates.begin(); it != prevLevel._aggregates.end(); ++it) {
+        for (auto it = prevLevel->_aggregates.begin(); it != prevLevel->_aggregates.end(); ++it) {
             string key = it->second.posStr();
 
-            auto curit = curLevel._aggregates.find(key);
-            if (curit != curLevel._aggregates.end() && !curit->second.isNew) {
-                curLevel._aggregates.erase(curit);
+            auto curit = curLevel->_aggregates.find(key);
+            if (curit != curLevel->_aggregates.end() && !curit->second.isNew) {
+                curLevel->_aggregates.erase(curit);
                 AggregateInformation a(it->second.poo, i);
-                curLevel._aggregates[key] = a;
-            } else if (curit == curLevel._aggregates.end()) {
+                curLevel->_aggregates[key] = a;
+            } else if (curit == curLevel->_aggregates.end()) {
                 AggregateInformation a(it->second.poo, i);
-                curLevel._aggregates[key] = a;
+                curLevel->_aggregates[key] = a;
             }
 
-            curLevel._aggregates[key].add(it->second);
+            curLevel->_aggregates[key].add(it->second);
             it->second.isNew = false;
         }
     }
 }
+
+CacheHit Cache::occupancy(P2PRSU* rsu) {
+    auto atomic = _atomics.find(rsu->id());
+    if(atomic != _atomics.end()) {
+        return CacheHit(atomic->second.occupancy, 0);
+    }
+
+    for(int i = 0; i < _levels.size(); ++i) {
+        string key = AggregateInformation::posStr(rsu->pos());
+        auto agg = _levels[i]._aggregates.find(key);
+        if(agg != _levels[i]._aggregates.end()) {
+            int estimated = rsu->capacity * (double(agg->second.occupancy) / agg->second.capacity);
+            return CacheHit(estimated, i);
+        }
+    }
+
+    return CacheHit();
+}
+

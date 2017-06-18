@@ -21,18 +21,25 @@
 #include "model/Cache.h"
 
 class P2P: public BaseWaveApplLayer {
-public:
-    void initialize(int stage);
-
 protected:
-    void onWSM(WaveShortMessage* wsm);
+    void initialize(int stage);
+    void finish();
 
+    void onWSM(WaveShortMessage* wsm);
     void handleSelfMsg(cMessage* msg);
 
     BroadcastParkingPlaceInformationEvt* broadcastPPIEvt;
 
 private:
     Cache _cache;
+
+    int cacheHits = 0;
+    int cacheMisses = 0;
+    cDoubleHistogram accuracy;
+    cLongHistogram hitlevel;
+    cLongHistogram reportSize;
+
+    void measureCorrectness();
 };
 
 #endif /* APPLICATION_P2P_H_ */

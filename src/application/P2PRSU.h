@@ -17,18 +17,24 @@
 #define APPLICATION_P2PRSU_H_
 
 #include <BaseWaveApplLayer.h>
+#include <vector>
 #include "messages/BroadcastParkingPlaceInformationEvt_m.h"
 #include "messages/ResourceReport_m.h"
 
-extern int Occupancies[10];
-
 class P2PRSU: public BaseWaveApplLayer {
-private:
+public:
+    static std::vector<P2PRSU*> Occupancies;
+
     int capacity;
+    int occupancy;
 
-    cOutVector occupancyVector;
+    Coord& pos() {
+        return curPosition;
+    }
 
-    ResourceReport* generateReport();
+    int id() {
+        return myId;
+    }
 
 protected:
     BroadcastParkingPlaceInformationEvt* broadcastPPIEvt;
@@ -36,6 +42,11 @@ protected:
     void initialize(int stage) override;
 
     void handleSelfMsg(cMessage* msg) override;
+
+private:
+    cOutVector occupancyVector;
+
+    ResourceReport* generateReport();
 };
 
 #endif /* APPLICATION_P2PRSU_H_ */

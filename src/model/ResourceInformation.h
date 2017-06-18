@@ -24,7 +24,7 @@ public:
     /**
      * Time of origin.
      */
-    std::time_t too;
+    simtime_t too;
 
     /**
      * Point of origin.
@@ -44,14 +44,14 @@ public:
             capacity(capacity), occupancy(occupancy) {
     }
 
-    ResourceInformation(std::time_t too, Coord& poo, unsigned short capacity,
+    ResourceInformation(simtime_t too, Coord& poo, unsigned short capacity,
             unsigned short occupancy) :
             too(too), poo(poo), capacity(capacity), occupancy(occupancy) {
     }
 
-    void saveRelevance(Coord& position);
+    void saveRelevance(Coord& position, simtime_t& time);
 
-    virtual double relevance(Coord& position) = 0;
+    virtual double relevance(Coord& position, simtime_t& time) = 0;
 };
 
 #endif /* MODEL_RESOURCEINFORMATION_H_ */

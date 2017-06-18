@@ -27,12 +27,12 @@ public:
     AtomicInformation() {
     }
 
-    AtomicInformation(unsigned int id, std::time_t too, Coord& poo,
+    AtomicInformation(unsigned int id, simtime_t too, Coord& poo,
             unsigned short capacity, unsigned short occupancy) :
             ResourceInformation(too, poo, capacity, occupancy), id(id) {
     }
 
-    double relevance(Coord& position);
+    double relevance(Coord& position, simtime_t& time);
 };
 
 #endif /* MODEL_ATOMICINFORMATION_H_ */

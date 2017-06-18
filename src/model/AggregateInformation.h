@@ -26,7 +26,7 @@
 
 class AggregateInformation: public ResourceInformation {
 public:
-    static std::string posStr(AtomicInformation& info);
+    static std::string posStr(Coord& coord);
 
     /**
      * Horizontal grid position.
@@ -49,7 +49,7 @@ public:
 
     AggregateInformation(Coord& coord, unsigned short level);
 
-    double relevance(Coord& position);
+    double relevance(Coord& position, simtime_t& time);
 
     void add(ResourceInformation& info);
 

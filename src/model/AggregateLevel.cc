@@ -28,10 +28,9 @@ void AggregateLevel::update(AggregateInformation& aggregate) {
     _aggregates.insert(pair<string, AggregateInformation>(key, aggregate));
 }
 
-void AggregateLevel::cleanup() {
-    time_t now = time(NULL);
-    for(auto it = _aggregates.begin(); it != _aggregates.end(); ++it) {
-        if(difftime(now, it->second.too) > ENTRY_TTL) {
+void AggregateLevel::cleanup(simtime_t& time) {
+    for (auto it = _aggregates.begin(); it != _aggregates.end(); ++it) {
+        if ((time - it->second.too).dbl() > ENTRY_TTL) {
             _aggregates.erase(it);
         }
     }

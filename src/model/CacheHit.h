@@ -13,30 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef MODEL_CACHE_H_
-#define MODEL_CACHE_H_
+#ifndef MODEL_CACHEHIT_H_
+#define MODEL_CACHEHIT_H_
 
-#define CACHE_LEVELS 6
+struct CacheHit {
+    int occupancy;
+    int level;
+    bool miss;
 
-#include <array>
-#include <map>
-#include <application/P2PRSU.h>
-#include "messages/ResourceReport_m.h"
-#include "AggregateLevel.h"
-#include "CacheHit.h"
-
-class Cache {
-public:
-    void update(ResourceReport& report);
-    ResourceReport* getReport(Coord& position, simtime_t& time);
-    CacheHit occupancy(P2PRSU* rsu);
-
-private:
-    std::array<AggregateLevel, CACHE_LEVELS> _levels;
-    std::map<int, AtomicInformation> _atomics;
-
-    void cleanup(simtime_t& time);
-    void updateAggregates();
+    CacheHit() : miss(true){}
+    CacheHit(int occupancy, int level) : occupancy(occupancy), level(level), miss(false){}
 };
 
-#endif /* MODEL_CACHE_H_ */
+#endif /* MODEL_CACHEHIT_H_ */

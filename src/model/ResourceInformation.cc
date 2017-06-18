@@ -15,6 +15,6 @@
 
 #include "ResourceInformation.h"
 
-void ResourceInformation::saveRelevance(Coord& position) {
-    _relevance = relevance(position);
+void ResourceInformation::saveRelevance(Coord& position, simtime_t& time) {
+    _relevance = relevance(position, time);
 }

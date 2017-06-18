@@ -17,8 +17,8 @@
 
 #define AVG_SPEED (40.0 / 3.6)
 
-double AtomicInformation::relevance(Coord &position) {
+double AtomicInformation::relevance(Coord &position, simtime_t& time) {
     double distance = position.distance(poo);
-    double age_s = difftime(time(NULL), too);
-    return -distance / AVG_SPEED - age_s;
+    simtime_t age_s = time - too;
+    return -distance / AVG_SPEED - age_s.dbl();
 }
