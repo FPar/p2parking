@@ -77,8 +77,11 @@ void P2P::handleSelfMsg(cMessage* msg) {
 }
 
 void P2P::measureCorrectness() {
-    for (int i = 0; i < P2PRSU::Occupancies.size(); ++i) {
-        P2PRSU* rsu = P2PRSU::Occupancies[i];
+    int foundRsus = 0;
+    double caccuracy = 0;
+
+    for (int i = 0; i < P2PRSU::RSUs.size(); ++i) {
+        P2PRSU* rsu = P2PRSU::RSUs[i];
         CacheHit c = _cache.occupancy(rsu);
 
         if (c.miss) {
@@ -91,16 +94,23 @@ void P2P::measureCorrectness() {
         double miss = abs(rsu->occupancy - c.occupancy) / double(rsu->capacity);
         double acc = 1 - miss;
 
-        int r = 255 * miss;
-        int g = 255 * acc;
+        caccuracy += acc;
+        ++foundRsus;
+
+        accuracy.collect(acc);
+        hitlevel.collect(c.level);
+    }
+
+    if (foundRsus > 0) {
+        caccuracy = caccuracy / foundRsus;
+
+        int r = 255 * (1 - caccuracy);
+        int g = 255 * caccuracy;
         r = r < 0 ? 0 : r > 255 ? 255 : r;
         g = g < 0 ? 0 : g > 255 ? 255 : g;
         std::stringstream color;
         color << "r=10,#" << std::hex << std::setw(2) << std::setfill('0') << r
                 << std::hex << std::setw(2) << std::setfill('0') << g << "00";
         findHost()->getDisplayString().updateWith(color.str().data());
-
-        accuracy.collect(acc);
-        hitlevel.collect(c.level);
     }
 }

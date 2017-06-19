@@ -23,7 +23,7 @@
 
 class P2PRSU: public BaseWaveApplLayer {
 public:
-    static std::vector<P2PRSU*> Occupancies;
+    static std::vector<P2PRSU*> RSUs;
 
     int capacity;
     int occupancy;

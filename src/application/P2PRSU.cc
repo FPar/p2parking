@@ -18,12 +18,12 @@
 
 Define_Module(P2PRSU);
 
-std::vector<P2PRSU*> P2PRSU::Occupancies;
+std::vector<P2PRSU*> P2PRSU::RSUs;
 
 void P2PRSU::initialize(int stage) {
     BaseWaveApplLayer::initialize(stage);
     if (stage == 0) {
-        Occupancies.push_back(this);
+        RSUs.push_back(this);
 
         capacity = rand() % 15 + 10;
         occupancy = rand() % (capacity + 1);
