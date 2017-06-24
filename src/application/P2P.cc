@@ -82,7 +82,8 @@ void P2P::measureCorrectness() {
 
     for (int i = 0; i < P2PRSU::RSUs.size(); ++i) {
         P2PRSU* rsu = P2PRSU::RSUs[i];
-        CacheHit c = _cache.occupancy(rsu);
+        simtime_t time = simTime();
+        CacheHit c = _cache.occupancy(rsu, curPosition, time);
 
         if (c.miss) {
             ++cacheMisses;

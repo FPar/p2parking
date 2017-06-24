@@ -18,8 +18,8 @@
 #include <vector>
 #include <algorithm>
 
-#define ENTRY_TTL 50
-#define MAXIMUM_REPORT_COUNT 5
+#define ENTRY_TTL 500
+#define MAXIMUM_REPORT_COUNT 20
 
 using namespace std;
 
@@ -156,21 +156,29 @@ void Cache::updateAggregates() {
     }
 }
 
-CacheHit Cache::occupancy(P2PRSU* rsu) {
+CacheHit Cache::occupancy(P2PRSU* rsu, Coord& position, simtime_t& time) {
+    CacheHit c;
+    double relevance = INT32_MIN;
+
     auto atomic = _atomics.find(rsu->id());
     if(atomic != _atomics.end()) {
-        return CacheHit(atomic->second.occupancy, 0);
+        relevance = atomic->second.relevance(position, time);
+        c = CacheHit(atomic->second.occupancy, 0);
     }
 
     for(int i = 0; i < _levels.size(); ++i) {
         string key = AggregateInformation::posStr(rsu->pos());
         auto agg = _levels[i]._aggregates.find(key);
         if(agg != _levels[i]._aggregates.end()) {
-            int estimated = rsu->capacity * (double(agg->second.occupancy) / agg->second.capacity);
-            return CacheHit(estimated, i);
+            double rel = agg->second.relevance(position, time);
+            if(rel > relevance) {
+                relevance = rel;
+                int estimated = rsu->capacity * (double(agg->second.occupancy) / agg->second.capacity);
+                c = CacheHit(estimated, i);
+            }
         }
     }
 
-    return CacheHit();
+    return c;
 }
 

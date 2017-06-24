@@ -29,7 +29,7 @@ class Cache {
 public:
     void update(ResourceReport& report);
     ResourceReport* getReport(Coord& position, simtime_t& time);
-    CacheHit occupancy(P2PRSU* rsu);
+    CacheHit occupancy(P2PRSU* rsu, Coord& position, simtime_t& time);
 
 private:
     std::array<AggregateLevel, CACHE_LEVELS> _levels;
